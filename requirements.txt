@@ -1,3 +1,7 @@
 streamlit
-openai
-PyPDF2
+pymupdf
+pdf2image
+pytesseract
+pillow
+groq
+reportlab
