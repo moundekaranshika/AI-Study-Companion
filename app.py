@@ -45,10 +45,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # HEADER
-st.markdown("<h1 style='text-align:center;'>🚀 AI Study Companion</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align:center;'> AI Study Companion</h1>", unsafe_allow_html=True)
 
 # SIDEBAR
-fast_mode = st.sidebar.checkbox("⚡ Fast Mode", value=True)
+fast_mode = st.sidebar.checkbox(" Fast Mode", value=True)
 
 uploaded_file = st.file_uploader("Upload PDF", type="pdf")
 
@@ -102,8 +102,8 @@ if uploaded_file:
     text = extract_text(uploaded_file, fast_mode)
 
     if len(text.strip()) == 0:
-        st.warning("⚠️ Could not extract text. Try another file.")
-        manual = st.text_area("✍️ Paste notes manually")
+        st.warning("Could not extract text. Try another file.")
+        manual = st.text_area(" Paste notes manually")
         if manual:
             text = manual
 
