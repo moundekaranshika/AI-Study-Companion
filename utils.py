@@ -1,74 +1,31 @@
-from groq import Groq
-import os
 import requests
+import os
 
-# Initialize Groq client
-import streamlit as st
+API_KEY = os.getenv("OPENROUTER_API_KEY")
 
-client = Groq(api_key=st.secrets["GROQ_API_KEY"])
+def call_ai(prompt):
+    response = requests.post(
+        url="https://openrouter.ai/api/v1/chat/completions",
+        headers={
+            "Authorization": f"Bearer {API_KEY}",
+            "Content-Type": "application/json"
+        },
+        json={
+            "model": "meta-llama/llama-3-8b-instruct",
+            "messages": [{"role": "user", "content": prompt}]
+        }
+    )
+    return response.json()['choices'][0]['message']['content']
 
-# 🔹 AI FUNCTIONS
 
 def generate_summary(text):
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[
-            {"role": "user", "content": f"Summarize this for a college student:\n{text[:3000]}"}
-        ],
-    )
-    return response.choices[0].message.content
-
+    return call_ai(f"Summarize for a student:\n{text[:3000]}")
 
 def generate_questions(text):
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[
-            {"role": "user", "content": f"Generate 5 viva questions with answers from:\n{text[:3000]}"}
-        ],
-    )
-    return response.choices[0].message.content
-
+    return call_ai(f"Generate 5 viva questions with answers:\n{text[:3000]}")
 
 def generate_flashcards(text):
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[
-            {"role": "user", "content": f"Create flashcards (Q/A format) from:\n{text[:3000]}"}
-        ],
-    )
-    return response.choices[0].message.content
+    return call_ai(f"Create flashcards:\n{text[:3000]}")
 
-
-def chat_with_notes(text, user_query):
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[
-            {"role": "system", "content": "Answer only from the given notes."},
-            {"role": "user", "content": f"Notes:\n{text[:3000]}\n\nQuestion:\n{user_query}"}
-        ],
-    )
-    return response.choices[0].message.content
-
-
-# 🔹 OCR API FUNCTION
-
-def ocr_space_api(image_bytes):
-    url = "https://api.ocr.space/parse/image"
-
-    payload = {
-        'apikey': os.getenv("OCR_API_KEY"),
-        'language': 'eng',
-        'isOverlayRequired': False
-    }
-
-    files = {
-        'file': ('image.png', image_bytes, 'image/png')
-    }
-
-    response = requests.post(url, files=files, data=payload)
-    result = response.json()
-
-    try:
-        return result['ParsedResults'][0]['ParsedText']
-    except:
-        return ""
+def chat_with_notes(text, query):
+    return call_ai(f"Notes:\n{text[:3000]}\nQuestion:\n{query}")
