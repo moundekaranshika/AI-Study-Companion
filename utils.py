@@ -3,7 +3,9 @@ import os
 import requests
 
 # Initialize Groq client
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+import streamlit as st
+
+client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
 # 🔹 AI FUNCTIONS
 
