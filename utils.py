@@ -3,7 +3,7 @@ import os
 import requests
 
 # Initialize Groq client
-client = Groq(api_key=os.getenv("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"))
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 # 🔹 AI FUNCTIONS
 
