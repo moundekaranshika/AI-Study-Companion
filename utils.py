@@ -17,7 +17,7 @@ def call_ai(prompt):
                 "Content-Type": "application/json"
             },
             json={
-                "model": "meta-llama/llama-3-8b-instruct",
+                "model": "mistralai/mistral-7b-instruct:free",
                 "messages": [{"role": "user", "content": prompt}]
             }
         )
