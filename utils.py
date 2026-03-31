@@ -1,8 +1,8 @@
 import requests
 import streamlit as st
 
-API_KEY = st.secrets["OPENROUTER_API_KEY"]
-OCR_KEY = st.secrets["OCR_API_KEY"]
+API_KEY = st.secrets.get("OPENROUTER_API_KEY", "")
+OCR_KEY = st.secrets.get("OCR_API_KEY", "")
 
 URL = "https://openrouter.ai/api/v1/chat/completions"
 
