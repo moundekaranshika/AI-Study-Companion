@@ -1,14 +1,11 @@
 import google.generativeai as genai
 import streamlit as st
-import requests
 
-# Configure Gemini
 genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 
-model = genai.GenerativeModel("gemini-1.5-flash-latest")
+model = genai.GenerativeModel("gemini-pro")
 
 
-# 🔹 AI CALL
 def call_ai(prompt):
     try:
         response = model.generate_content(prompt)
