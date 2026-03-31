@@ -5,7 +5,7 @@ import requests
 # Configure Gemini
 genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = genai.GenerativeModel("gemini-1.5-flash-latest")
 
 
 # 🔹 AI CALL
