@@ -1,14 +1,18 @@
-import google.generativeai as genai
+from google import genai
 import streamlit as st
+import requests
 
-genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+# Configure client
+client = genai.Client(api_key=st.secrets["GOOGLE_API_KEY"])
 
-model = genai.GenerativeModel("gemini-pro")
 
-
+# 🔹 AI CALL
 def call_ai(prompt):
     try:
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt
+        )
         return response.text
     except Exception as e:
         return f"Error: {str(e)}"
@@ -16,7 +20,7 @@ def call_ai(prompt):
 
 # 🔹 FEATURES
 def generate_summary(text):
-    return call_ai(f"Summarize this for a college student:\n{text[:3000]}")
+    return call_ai(f"Summarize for a student:\n{text[:3000]}")
 
 
 def generate_questions(text):
@@ -24,14 +28,14 @@ def generate_questions(text):
 
 
 def generate_flashcards(text):
-    return call_ai(f"Create flashcards (Q/A format):\n{text[:3000]}")
+    return call_ai(f"Create flashcards:\n{text[:3000]}")
 
 
 def chat_with_notes(text, query):
-    return call_ai(f"Answer ONLY from these notes:\n{text[:3000]}\n\nQuestion:\n{query}")
+    return call_ai(f"Notes:\n{text[:3000]}\nQuestion:\n{query}")
 
 
-# 🔹 OCR (same as before)
+# 🔹 OCR
 def ocr_space_api(image_bytes):
     try:
         response = requests.post(
