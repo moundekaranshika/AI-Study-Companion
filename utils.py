@@ -1,41 +1,25 @@
-import requests
+import google.generativeai as genai
 import streamlit as st
+import requests
 
-API_KEY = st.secrets.get("OPENROUTER_API_KEY", "")
-OCR_KEY = st.secrets.get("OCR_API_KEY", "")
+# Configure Gemini
+genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 
-URL = "https://openrouter.ai/api/v1/chat/completions"
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 
 # 🔹 AI CALL
 def call_ai(prompt):
     try:
-        response = requests.post(
-            url=URL,
-            headers={
-                "Authorization": f"Bearer {API_KEY}",
-                "Content-Type": "application/json"
-            },
-            json={
-                "model": "openchat/openchat-7b:free",
-                "messages": [{"role": "user", "content": prompt}]
-            }
-        )
-
-        data = response.json()
-
-        if "choices" not in data:
-            return f"API Error: {data}"
-
-        return data['choices'][0]['message']['content']
-
+        response = model.generate_content(prompt)
+        return response.text
     except Exception as e:
         return f"Error: {str(e)}"
 
 
 # 🔹 FEATURES
 def generate_summary(text):
-    return call_ai(f"Summarize for a student:\n{text[:3000]}")
+    return call_ai(f"Summarize this for a college student:\n{text[:3000]}")
 
 
 def generate_questions(text):
@@ -43,20 +27,20 @@ def generate_questions(text):
 
 
 def generate_flashcards(text):
-    return call_ai(f"Create flashcards:\n{text[:3000]}")
+    return call_ai(f"Create flashcards (Q/A format):\n{text[:3000]}")
 
 
 def chat_with_notes(text, query):
-    return call_ai(f"Notes:\n{text[:3000]}\nQuestion:\n{query}")
+    return call_ai(f"Answer ONLY from these notes:\n{text[:3000]}\n\nQuestion:\n{query}")
 
 
-# 🔹 OCR
+# 🔹 OCR (same as before)
 def ocr_space_api(image_bytes):
     try:
         response = requests.post(
             "https://api.ocr.space/parse/image",
             files={"file": ("image.png", image_bytes)},
-            data={"apikey": OCR_KEY}
+            data={"apikey": st.secrets["OCR_API_KEY"]}
         )
 
         result = response.json()
